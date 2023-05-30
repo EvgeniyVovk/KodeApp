@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".ui.ErrorFragment">
+
+    <ImageView
+        android:id="@+id/error_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/error_image"/>
+
+    <TextView
+        android:id="@+id/error_header_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_color_black"
+        android:layout_marginBottom="12dp"
+        android:text="@string/error_header_text_view_text"/>
+
+    <TextView
+        android:id="@+id/error_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:textColor="#97979B"
+        android:text="@string/error_text_view_text"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/try_again_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/try_again_button_text"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter" />
+
+</LinearLayout>

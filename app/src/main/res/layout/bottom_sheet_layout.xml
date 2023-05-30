@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/bottom_sheet_header_text"
+        android:fontFamily="@font/inter"
+        android:textStyle="bold"
+        android:textColor="@color/text_color_black"
+        android:textSize="20sp"/>
+
+    <RadioGroup
+        android:id="@+id/dialog_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="30dp">
+
+        <RadioButton
+            android:id="@+id/radio_button_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_radio_button_text"
+            android:fontFamily="@font/inter"
+            android:textStyle="normal"
+            android:textColor="@color/text_color_black"
+            android:textSize="16sp"
+            android:buttonTint="@color/purple_500"/>
+
+        <RadioButton
+            android:id="@+id/radio_button_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/second_radio_button_text"
+            android:fontFamily="@font/inter"
+            android:textStyle="normal"
+            android:textColor="@color/text_color_black"
+            android:textSize="16sp"
+            android:buttonTint="@color/purple_500"/>
+    </RadioGroup>
+</LinearLayout>

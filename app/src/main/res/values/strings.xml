@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">KodeApp</string>
+    <string name="hint_search">Введите имя, тег, почту...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_text_button">Отмена</string>
+    <string name="error_text_view_text">Постараемся быстро починить</string>
+    <string name="error_header_text_view_text">Какой-то сверхразум все сломал</string>
+    <string name="try_again_button_text">Попробовать снова</string>
+    <string name="nothing_found_text">Мы никого не нашли</string>
+    <string name="try_again_text">Попробуйте скорректировать запрос</string>
+    <string name="bottom_sheet_header_text">Сортировка</string>
+    <string name="first_radio_button_text">По алфавиту</string>
+    <string name="second_radio_button_text">По дню рождения</string>
+    <string name="snackbar_loading_text">Секундочку, гружусь...</string>
+</resources>
