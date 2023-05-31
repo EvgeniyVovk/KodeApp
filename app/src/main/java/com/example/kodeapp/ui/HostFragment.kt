@@ -21,16 +21,21 @@ import com.example.kodeapp.appComponent
 import com.example.kodeapp.data.Result
 import com.example.kodeapp.data.model.User
 import com.example.kodeapp.databinding.FragmentHostBinding
+import com.example.kodeapp.navigation.HostScreenRouter
+import com.example.kodeapp.navigation.HostScreenRouterImpl
+import com.example.kodeapp.navigation.UserDetailsScreenRouterImpl
 import com.example.kodeapp.ui.adapters.UserClickListener
 import com.example.kodeapp.utils.Constants.tabNames
 import com.example.kodeapp.viewmodel.ListViewModel
 import com.example.kodeapp.viewmodel.ViewModelFactory
+import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class HostFragment : Fragment(R.layout.fragment_host), SwipeRefreshLayout.OnRefreshListener, UserClickListener {
 
     private lateinit var binding: FragmentHostBinding
@@ -39,6 +44,13 @@ class HostFragment : Fragment(R.layout.fragment_host), SwipeRefreshLayout.OnRefr
 
     private val viewModel: ListViewModel by activityViewModels {
         factory.create()
+    }
+
+    @Inject
+    lateinit var router: Router
+
+    private val hostScreenRouter: HostScreenRouter by lazy {
+        HostScreenRouterImpl(router)
     }
 
     @Inject
@@ -132,9 +144,7 @@ class HostFragment : Fragment(R.layout.fragment_host), SwipeRefreshLayout.OnRefr
     private fun showError(message: String?, e: Exception?) {
         snackbar.dismiss()
         binding.refreshLayout.isRefreshing = false
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ErrorFragment())
-            .commit()
+        hostScreenRouter.routeToErrorScreen()
         // отобразить сообщение об ошибке в UI
     }
 
@@ -223,6 +233,7 @@ class HostFragment : Fragment(R.layout.fragment_host), SwipeRefreshLayout.OnRefr
         })
         binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
+                binding.searchView.clearFocus()
                 return true
             }
 
@@ -234,9 +245,6 @@ class HostFragment : Fragment(R.layout.fragment_host), SwipeRefreshLayout.OnRefr
     }
 
     override fun onUserDetails(user: User) {
-        parentFragmentManager.beginTransaction()
-            .addToBackStack(null)
-            .replace(R.id.main_container, UserDetailFragment.newInstance(user))
-            .commit()
+        hostScreenRouter.routeToDetailScreen(user)
     }
 }

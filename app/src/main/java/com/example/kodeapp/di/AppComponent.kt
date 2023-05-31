@@ -6,18 +6,23 @@ import com.example.kodeapp.data.Repository
 import com.example.kodeapp.data.RepositoryImpl
 import com.example.kodeapp.ui.*
 import com.example.kodeapp.utils.Constants.BASE_URL
+import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.google.gson.GsonBuilder
 import dagger.Binds
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 import javax.inject.Qualifier
-
-@Component(modules = [AppModule::class])
+import javax.inject.Singleton
+@Singleton
+@Component(modules = [NetworkModule::class, NavigationModule::class, AppBindModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(fragment: UserListFragment)
@@ -27,12 +32,25 @@ interface AppComponent {
     fun inject(fragment: UserListByGroupFragment)
 }
 
-@Module(includes = [NetworkModule::class, AppBindModule::class])
-class AppModule
+@Module
+@InstallIn(SingletonComponent::class)
+class NavigationModule {
+    private val cicerone: Cicerone<Router> = Cicerone.create()
+
+    @Provides
+    fun provideRouter(): Router {
+        return cicerone.router
+    }
+
+    @Provides
+    fun provideNavigatorHolder(): NavigatorHolder {
+        return cicerone.getNavigatorHolder()
+    }
+}
 
 @Module
+@InstallIn(SingletonComponent::class)
 class NetworkModule {
-
     @Provides
     fun provideProductionLessonsService(): ApiService {
         val client = OkHttpClient.Builder().apply {
@@ -74,6 +92,7 @@ class NetworkModule {
 }
 
 @Module
+@InstallIn(SingletonComponent::class)
 interface AppBindModule {
 
     @Suppress("FunctionName")

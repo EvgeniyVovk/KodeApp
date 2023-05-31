@@ -10,15 +10,26 @@ import androidx.fragment.app.activityViewModels
 import com.example.kodeapp.R
 import com.example.kodeapp.appComponent
 import com.example.kodeapp.databinding.FragmentErrorBinding
+import com.example.kodeapp.navigation.ErrorScreenRouter
+import com.example.kodeapp.navigation.ErrorScreenRouterImpl
 import com.example.kodeapp.viewmodel.ListViewModel
 import com.example.kodeapp.viewmodel.ViewModelFactory
+import com.github.terrakok.cicerone.Router
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class ErrorFragment : Fragment() {
 
     private lateinit var binding: FragmentErrorBinding
     private val viewModel: ListViewModel by activityViewModels {
         factory.create()
+    }
+
+    @Inject
+    lateinit var router: Router
+
+    private val routerErrorFragment: ErrorScreenRouter by lazy {
+        ErrorScreenRouterImpl(router)
     }
 
     @Inject
@@ -44,9 +55,7 @@ class ErrorFragment : Fragment() {
     private fun setupTryAgainButton(){
         binding.tryAgainButton.setOnClickListener {
             viewModel.loadData()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_container, HostFragment())
-                .commit()
+            routerErrorFragment.routeToHostScreen()
         }
     }
 }

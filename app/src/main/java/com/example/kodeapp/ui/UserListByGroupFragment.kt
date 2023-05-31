@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
-
 class UserListByGroupFragment: Fragment(R.layout.fragment_user_list) {
     private lateinit var binding: FragmentUserListBinding
     private lateinit var adapter: UsersListGroupAdapter

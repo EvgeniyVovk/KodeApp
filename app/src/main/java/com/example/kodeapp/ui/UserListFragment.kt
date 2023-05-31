@@ -13,11 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodeapp.R
 import com.example.kodeapp.appComponent
-import com.example.kodeapp.data.model.User
 import com.example.kodeapp.databinding.FragmentUserListBinding
 import com.example.kodeapp.ui.adapters.UserAdapter
-import com.example.kodeapp.ui.adapters.UserClickListener
-import com.example.kodeapp.utils.Constants.ARG_POS
 import com.example.kodeapp.viewmodel.ListViewModel
 import com.example.kodeapp.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch

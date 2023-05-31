@@ -13,11 +13,14 @@ import com.example.kodeapp.R
 import com.example.kodeapp.appComponent
 import com.example.kodeapp.data.model.User
 import com.example.kodeapp.databinding.FragmentUserDetailBinding
+import com.example.kodeapp.navigation.UserDetailsScreenRouterImpl
 import com.example.kodeapp.utils.Constants.ARG_USER
 import com.example.kodeapp.viewmodel.UserDetailViewModel
 import com.example.kodeapp.viewmodel.ViewModelFactory
+import com.github.terrakok.cicerone.Router
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class UserDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentUserDetailBinding
@@ -25,6 +28,13 @@ class UserDetailFragment : Fragment() {
 
     private val viewModel: UserDetailViewModel by viewModels {
         factory.create()
+    }
+
+    @Inject
+    lateinit var router: Router
+
+    private val userDetailsRouter: UserDetailsScreenRouterImpl by lazy {
+        UserDetailsScreenRouterImpl(router)
     }
 
     @Inject
@@ -61,7 +71,7 @@ class UserDetailFragment : Fragment() {
 
     private fun setupToolBar(){
         binding.topAppBarDetail.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            userDetailsRouter.routeToHostScreen()
         }
     }
 

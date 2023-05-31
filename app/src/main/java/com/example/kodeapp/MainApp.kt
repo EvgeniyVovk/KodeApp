@@ -4,15 +4,22 @@ import android.app.Application
 import android.content.Context
 import com.example.kodeapp.di.AppComponent
 import com.example.kodeapp.di.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MainApp : Application() {
 
-    lateinit var appComponent: AppComponent
-        private set
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.builder().build()
+    }
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
+        INSTANCE = this
+    }
+
+    companion object {
+        lateinit var INSTANCE: MainApp
     }
 }
 
