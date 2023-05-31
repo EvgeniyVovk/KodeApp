@@ -1,24 +1,36 @@
 package com.example.kodeapp.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kodeapp.data.*
+import com.example.kodeapp.data.model.User
+import com.example.kodeapp.ui.adapters.UserClickListener
 import com.example.kodeapp.utils.Constants.departments
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class ListViewModel(private val repository: Repository) : ViewModel() {
 
     private val _users = MutableSharedFlow<Result<List<User>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_LATEST)
     val users: SharedFlow<Result<List<User>>> = _users.asSharedFlow()
 
-    private val _sortingFlag = MutableSharedFlow<Boolean>(replay = 1, onBufferOverflow = BufferOverflow.DROP_LATEST)
-    val sortingFlag: SharedFlow<Boolean> = _sortingFlag.asSharedFlow()
+    private val _sortingFlag = MutableStateFlow(false)
+    val sortingFlag: MutableStateFlow<Boolean> = _sortingFlag
+
+    private val _usersListToShow = MutableStateFlow<List<User>>(listOf())
+    val usersListToShow: MutableStateFlow<List<User>> = _usersListToShow
+
+    private val _selectedPositionTabIndex = MutableStateFlow(0)
+    val selectedPositionTabIndex:MutableStateFlow<Int> = _selectedPositionTabIndex
+
+    private val _userClickInterfaceImpl: MutableLiveData<UserClickListener?> = MutableLiveData(null)
+    val userClickInterfaceImpl: LiveData<UserClickListener?> = _userClickInterfaceImpl
+    fun setClickInterface(clickInterface: UserClickListener){
+        _userClickInterfaceImpl.value= clickInterface
+    }
 
     private var originalList: List<User> = listOf()
     private var currentList: List<User> = listOf()
@@ -29,20 +41,26 @@ class ListViewModel(private val repository: Repository) : ViewModel() {
 
     fun loadData(position: Int = 0) {
         viewModelScope.launch {
-            updateFlag(false)
             _users.emit(Result.Loading)
             val result = repository.getData()
             if (result is Result.Success){
                 originalList = result.data
                 tabsFilterList(position)
             } else {
-                _users.emit(result)
+                if (currentList.isNotEmpty()) _users.emit(Result.Success(currentList))
+                else _users.emit(result)
             }
         }
     }
 
     private fun updateFlag(flag: Boolean){
         _sortingFlag.tryEmit(flag)
+    }
+
+    fun saveTabIndex(position: Int){
+        viewModelScope.launch {
+            _selectedPositionTabIndex.emit(position)
+        }
     }
 
     fun sortByAlphabet(){
@@ -53,14 +71,14 @@ class ListViewModel(private val repository: Repository) : ViewModel() {
         )
         if (currentList.isNotEmpty()) {
             val filteredUsers = currentList.sortedWith(nameComparator)
+            currentList = filteredUsers
+            _usersListToShow.tryEmit(filteredUsers)
             _users.tryEmit(Result.Success(filteredUsers))
         }
     }
 
     fun sortByBirthday(){
         if (currentList.isNotEmpty()) {
-            val filteredUsers = currentList.sortedBy { it.birthday }
-            _users.tryEmit(Result.Success(filteredUsers))
             updateFlag(true)
         }
     }
@@ -70,9 +88,14 @@ class ListViewModel(private val repository: Repository) : ViewModel() {
             val filteredUsers = if (query.isBlank()) {
                 currentList
             } else {
-                currentList.filter { it.firstName.contains(query, ignoreCase = true) }
+                currentList.filter {
+                    it.firstName.contains(query, ignoreCase = true)
+                            || it.lastName.contains(query, ignoreCase = true)
+                            || it.userTag.contains(query, ignoreCase = true)
+                }
             }
             _users.tryEmit(Result.Success(filteredUsers))
+            _usersListToShow.tryEmit(filteredUsers)
         }
     }
 
@@ -81,6 +104,7 @@ class ListViewModel(private val repository: Repository) : ViewModel() {
             when (position){
                 0 -> {
                     currentList = originalList
+                    _usersListToShow.value = originalList
                     _users.tryEmit(Result.Success(originalList))
                 }
                 else -> {
@@ -89,8 +113,8 @@ class ListViewModel(private val repository: Repository) : ViewModel() {
                             departments[position]!!,
                             ignoreCase = true
                         )}
-                    _users.tryEmit(Result.Success(currentList)
-                    )
+                    _usersListToShow.value = currentList
+                    _users.tryEmit(Result.Success(currentList))
                 }
             }
         }

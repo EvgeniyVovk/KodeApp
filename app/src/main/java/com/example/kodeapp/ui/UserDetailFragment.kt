@@ -7,16 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.kodeapp.R
 import com.example.kodeapp.appComponent
-import com.example.kodeapp.data.User
+import com.example.kodeapp.data.model.User
 import com.example.kodeapp.databinding.FragmentUserDetailBinding
 import com.example.kodeapp.utils.Constants.ARG_USER
-import com.example.kodeapp.viewmodel.ListViewModel
 import com.example.kodeapp.viewmodel.UserDetailViewModel
 import com.example.kodeapp.viewmodel.ViewModelFactory
 import javax.inject.Inject
@@ -64,9 +61,7 @@ class UserDetailFragment : Fragment() {
 
     private fun setupToolBar(){
         binding.topAppBarDetail.setNavigationOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_container, HostFragment())
-                .commit()
+            parentFragmentManager.popBackStack()
         }
     }
 

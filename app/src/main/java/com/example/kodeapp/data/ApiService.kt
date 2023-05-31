@@ -1,8 +1,7 @@
 package com.example.kodeapp.data
 
-import retrofit2.Response
+import com.example.kodeapp.data.model.UsersList
 import retrofit2.http.GET
-import retrofit2.http.Headers
 
 interface ApiService {
     @GET("mocks/kode-education/trainee-test/25143926/users")

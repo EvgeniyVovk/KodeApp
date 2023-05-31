@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:background="@drawable/dialog_background">
 
+    <ImageView
+        android:id="@+id/line_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/small_line_icon"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

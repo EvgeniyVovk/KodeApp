@@ -1,6 +1,6 @@
 package com.example.kodeapp.data
 
-import android.util.Log
+import com.example.kodeapp.data.model.User
 import javax.inject.Inject
 
 interface Repository {

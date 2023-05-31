@@ -24,6 +24,7 @@ interface AppComponent {
     fun inject(fragment: HostFragment)
     fun inject(fragment: ErrorFragment)
     fun inject(fragment: UserDetailFragment)
+    fun inject(fragment: UserListByGroupFragment)
 }
 
 @Module(includes = [NetworkModule::class, AppBindModule::class])
